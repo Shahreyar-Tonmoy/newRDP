@@ -16,9 +16,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: List files in root
+      - name: List files in subdirectory
         run: |
-          dir
+          dir path/to/subdirectory
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -27,12 +27,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          nuget restore YourSolution.sln
+          nuget restore path/to/subdirectory/YourSolution.sln
 
       - name: Build and test
         run: |
-          dotnet build YourSolution.sln
-          dotnet test YourSolution.sln
+          dotnet build path/to/subdirectory/YourSolution.sln
+          dotnet test path/to/subdirectory/YourSolution.sln
 
       - name: Install AnyDesk
         run: |
