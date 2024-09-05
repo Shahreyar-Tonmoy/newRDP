@@ -47,15 +47,33 @@ jobs:
           dotnet build path/to/YourSolution.sln || echo "Build failed."
           dotnet test path/to/YourSolution.sln || echo "Tests failed."
 
-      - name: Install AnyDesk
+      - name: Install RustDesk
         run: |
           $ErrorActionPreference = "Stop"
-          Invoke-WebRequest -Uri "https://download.anydesk.com/AnyDesk.exe" -OutFile "AnyDesk.exe"
-          Start-Process -FilePath ".\AnyDesk.exe" -ArgumentList "/S" -NoNewWindow -Wait
+          Invoke-WebRequest -Uri "https://github.com/rustdesk/rustdesk/releases/download/v1.2.0/rustdesk-1.2.0-windows-amd64.exe" -OutFile "RustDesk.exe"
+          Start-Process -FilePath ".\RustDesk.exe" -ArgumentList "/S" -NoNewWindow -Wait
 
-      - name: Configure AnyDesk
+      - name: Start RustDesk
         run: |
-          Write-Output "AnyDesk installed and configured."
+          Start-Process -FilePath "C:\Program Files\RustDesk\RustDesk.exe" -NoNewWindow -Wait
+
+      - name: Retrieve RustDesk Connection ID and Password
+        id: rustdesk
+        run: |
+          $rustdesk_config_path = "C:\Users\runneradmin\AppData\Local\RustDesk"
+          $connection_info_file = "$rustdesk_config_path\connection_info.json"
+
+          if (Test-Path $connection_info_file) {
+            $connection_info = Get-Content -Path $connection_info_file | ConvertFrom-Json
+            Write-Output "RustDesk Connection ID: $($connection_info.id)"
+            Write-Output "RustDesk Password: $($connection_info.password)"
+            echo "RUSTDESK_ID=$($connection_info.id)" >> $env:GITHUB_ENV
+            echo "RUSTDESK_PASS=$($connection_info.password)" >> $env:GITHUB_ENV
+          } else {
+            Write-Output 'Connection info file not found.'
+            echo "RUSTDESK_ID=NotAvailable" >> $env:GITHUB_ENV
+            echo "RUSTDESK_PASS=NotAvailable" >> $env:GITHUB_ENV
+          }
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
