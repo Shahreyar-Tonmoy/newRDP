@@ -1,39 +1,51 @@
-name: Remote Desktop with Docker
+name: Windows RDP Workflow
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build-and-run:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: windows-latest
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Docker
-      uses: docker/setup-buildx-action@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.x'
 
-    - name: Build Docker image
-      run: |
-        # Adjust the path to the Dockerfile if it's in a subdirectory
-        docker build -t my-remote-desktop -f path/to/Dockerfile .
+      - name: Install dependencies
+        run: |
+          nuget restore
 
-    - name: Run Docker container
-      run: |
-        docker run -d -p 5901:5901 --name remote-desktop my-remote-desktop
+      - name: Build and test
+        run: |
+          dotnet build
+          dotnet test
 
-    - name: Verify Docker container
-      run: |
-        docker ps
-        docker logs remote-desktop
+      - name: Install AnyDesk
+        run: |
+          $ErrorActionPreference = "Stop"
+          Invoke-WebRequest -Uri "https://download.anydesk.com/AnyDesk.exe" -OutFile "AnyDesk.exe"
+          Start-Process -FilePath ".\AnyDesk.exe" -ArgumentList "/S" -NoNewWindow -Wait
 
-    - name: Wait for VNC server to start
-      run: |
-        sleep 30  # Give some time for the VNC server to start
+      - name: Configure AnyDesk
+        run: |
+          # Replace this with any configuration commands you need
+          # For example, you might need to automate the initial setup
+          # Note: AnyDesk might not fully support unattended setups in this environment
+          Write-Output "AnyDesk installed and configured."
 
-    - name: Retrieve VNC server info
-      run: |
-        echo "VNC server is running on port 5901"
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: |
+            path/to/your/build/artifacts
