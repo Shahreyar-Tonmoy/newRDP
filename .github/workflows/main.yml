@@ -20,10 +20,6 @@ jobs:
         run: |
           dir
 
-      - name: List files in subdirectory
-        run: |
-          dir path/to/subdirectory
-
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
@@ -31,12 +27,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          nuget restore path/to/your/solution.sln
+          nuget restore YourSolution.sln
 
       - name: Build and test
         run: |
-          dotnet build path/to/your/solution.sln
-          dotnet test path/to/your/solution.sln
+          dotnet build YourSolution.sln
+          dotnet test YourSolution.sln
 
       - name: Install AnyDesk
         run: |
