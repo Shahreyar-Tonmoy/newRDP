@@ -16,6 +16,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: List files
+        run: |
+          dir
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
@@ -23,12 +27,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          nuget restore
+          nuget restore path/to/your/solution.sln
 
       - name: Build and test
         run: |
-          dotnet build
-          dotnet test
+          dotnet build path/to/your/solution.sln
+          dotnet test path/to/your/solution.sln
 
       - name: Install AnyDesk
         run: |
@@ -38,9 +42,6 @@ jobs:
 
       - name: Configure AnyDesk
         run: |
-          # Replace this with any configuration commands you need
-          # For example, you might need to automate the initial setup
-          # Note: AnyDesk might not fully support unattended setups in this environment
           Write-Output "AnyDesk installed and configured."
 
       - name: Upload build artifacts
