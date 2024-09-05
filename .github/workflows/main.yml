@@ -50,7 +50,8 @@ jobs:
       - name: Install RustDesk
         run: |
           $ErrorActionPreference = "Stop"
-          Invoke-WebRequest -Uri "https://github.com/rustdesk/rustdesk/releases/download/v1.2.0/rustdesk-1.2.0-windows-amd64.exe" -OutFile "RustDesk.exe"
+          $rustdeskUrl = "https://github.com/rustdesk/rustdesk/releases/latest/download/rustdesk-1.2.0-windows-x64.exe"
+          Invoke-WebRequest -Uri $rustdeskUrl -OutFile "RustDesk.exe"
           Start-Process -FilePath ".\RustDesk.exe" -ArgumentList "/S" -NoNewWindow -Wait
 
       - name: Start RustDesk
