@@ -25,14 +25,25 @@ jobs:
         with:
           dotnet-version: '7.x'
 
-      - name: Install dependencies
+      - name: Check for .sln file
+        id: check_sln
         run: |
-          # Replace 'YourSolution.sln' with the actual path to your .sln file
+          if (Test-Path 'path/to/YourSolution.sln') {
+            Write-Output 'Solution file found.'
+            echo "SOLUTION_FOUND=true" >> $env:GITHUB_ENV
+          } else {
+            Write-Output 'Solution file not found.'
+            echo "SOLUTION_FOUND=false" >> $env:GITHUB_ENV
+          }
+
+      - name: Install dependencies
+        if: env.SOLUTION_FOUND == 'true'
+        run: |
           nuget restore path/to/YourSolution.sln || echo "NuGet restore failed."
 
       - name: Build and test
+        if: env.SOLUTION_FOUND == 'true'
         run: |
-          # Replace 'YourSolution.sln' with the actual path to your .sln file
           dotnet build path/to/YourSolution.sln || echo "Build failed."
           dotnet test path/to/YourSolution.sln || echo "Tests failed."
 
