@@ -47,29 +47,15 @@ jobs:
           dotnet build path/to/YourSolution.sln || echo "Build failed."
           dotnet test path/to/YourSolution.sln || echo "Tests failed."
 
-      - name: Install RustDesk
+      - name: Setup Windows RDP
         run: |
-          $ErrorActionPreference = "Stop"
-          $rustdeskUrl = "https://github.com/rustdesk/rustdesk/releases/download/YOUR_VERSION/rustdesk-YOUR_VERSION-x86_64.exe"  # Update with the correct URL
-          Invoke-WebRequest -Uri $rustdeskUrl -OutFile "RustDesk.exe"
-          Start-Process -FilePath ".\RustDesk.exe" -ArgumentList "/S" -NoNewWindow -Wait
+          # Example of configuring RDP access. This is a placeholder.
+          # You will need to set up the appropriate network configurations and credentials.
+          Write-Output "Setting up Windows Remote Desktop. Ensure RDP access is configured on your target machine."
+          # Example configuration: Enable RDP and configure firewall rules (if applicable)
 
-      - name: Start RustDesk
+      - name: Connect to Remote Desktop
         run: |
-          Start-Process -FilePath "C:\Program Files\RustDesk\RustDesk.exe" -NoNewWindow -Wait
-
-      - name: Retrieve RustDesk Connection ID and Password
-        id: rustdesk
-        run: |
-          $rustdesk_config_path = "C:\Users\runneradmin\AppData\Local\RustDesk"
-          $connection_info_file = "$rustdesk_config_path\connection_info.json"
-
-          if (Test-Path $connection_info_file) {
-            $connection_info = Get-Content -Path $connection_info_file | ConvertFrom-Json
-            Write-Output "RustDesk Connection ID: $($connection_info.id)"
-            Write-Output "RustDesk Password: $($connection_info.password)"
-            echo "RUSTDESK_ID=$($connection_info.id)" >> $env:GITHUB_ENV
-            echo "RUSTDESK_PASS=$($connection_info.password)" >> $env:GITHUB_ENV
-          } else {
-            Write-Output "Connection info file not found."
-          }
+          # RDP connection is not typically executed within GitHub Actions.
+          # Instead, use a remote machine or service to execute RDP commands.
+          Write-Output "Connecting to Remote Desktop. This step is usually performed outside of GitHub Actions."
