@@ -48,11 +48,11 @@ jobs:
           dotnet test path/to/YourSolution.sln || echo "Tests failed."
 
       - name: Install RustDesk
-         run: |
-    $ErrorActionPreference = "Stop"
-    $rustdeskUrl = "https://github.com/rustdesk/rustdesk/releases/download/1.3.0/rustdesk-1.3.0-x86_64.exe"  # Replace with the correct URL
-    Invoke-WebRequest -Uri $rustdeskUrl -OutFile "RustDesk.exe"
-    Start-Process -FilePath ".\RustDesk.exe" -ArgumentList "/S" -NoNewWindow -Wait
+        run: |
+          $ErrorActionPreference = "Stop"
+          $rustdeskUrl = "https://github.com/rustdesk/rustdesk/releases/download/1.3.0/rustdesk-1.3.0-windows-x64.exe"  # Updated URL
+          Invoke-WebRequest -Uri $rustdeskUrl -OutFile "RustDesk.exe"
+          Start-Process -FilePath ".\RustDesk.exe" -ArgumentList "/S" -NoNewWindow -Wait
 
       - name: Start RustDesk
         run: |
@@ -70,4 +70,6 @@ jobs:
             Write-Output "RustDesk Password: $($connection_info.password)"
             echo "RUSTDESK_ID=$($connection_info.id)" >> $env:GITHUB_ENV
             echo "RUSTDESK_PASS=$($connection_info.password)" >> $env:GITHUB_ENV
-  
+          } else {
+            Write-Output "Connection info file not found."
+          }
