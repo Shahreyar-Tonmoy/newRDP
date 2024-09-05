@@ -50,7 +50,7 @@ jobs:
       - name: Install RustDesk
         run: |
           $ErrorActionPreference = "Stop"
-          $rustdeskUrl = "https://github.com/rustdesk/rustdesk/releases/latest/download/rustdesk-1.2.0-windows-x64.exe"
+          $rustdeskUrl = "https://github.com/rustdesk/rustdesk/releases/download/v1.2.0/rustdesk-1.2.0-windows-x64.exe"  # Update this URL
           Invoke-WebRequest -Uri $rustdeskUrl -OutFile "RustDesk.exe"
           Start-Process -FilePath ".\RustDesk.exe" -ArgumentList "/S" -NoNewWindow -Wait
 
@@ -70,15 +70,4 @@ jobs:
             Write-Output "RustDesk Password: $($connection_info.password)"
             echo "RUSTDESK_ID=$($connection_info.id)" >> $env:GITHUB_ENV
             echo "RUSTDESK_PASS=$($connection_info.password)" >> $env:GITHUB_ENV
-          } else {
-            Write-Output 'Connection info file not found.'
-            echo "RUSTDESK_ID=NotAvailable" >> $env:GITHUB_ENV
-            echo "RUSTDESK_PASS=NotAvailable" >> $env:GITHUB_ENV
-          }
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: build
-          path: |
-            path/to/your/build/artifacts
+  
