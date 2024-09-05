@@ -18,7 +18,8 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t my-remote-desktop .
+        # Adjust the path to the Dockerfile if it's in a subdirectory
+        docker build -t my-remote-desktop -f path/to/Dockerfile .
 
     - name: Run Docker container
       run: |
@@ -33,6 +34,6 @@ jobs:
       run: |
         sleep 30  # Give some time for the VNC server to start
 
-    - name: Retrieve AnyDesk ID
+    - name: Retrieve VNC server info
       run: |
         echo "VNC server is running on port 5901"
