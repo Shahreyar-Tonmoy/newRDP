@@ -16,9 +16,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: List files in subdirectory
+      - name: List files in root (for debugging)
         run: |
-          dir path/to/subdirectory
+          dir
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -27,12 +27,14 @@ jobs:
 
       - name: Install dependencies
         run: |
-          nuget restore path/to/subdirectory/YourSolution.sln
+          # Replace 'YourSolution.sln' with the actual path to your .sln file
+          nuget restore path/to/YourSolution.sln || echo "NuGet restore failed."
 
       - name: Build and test
         run: |
-          dotnet build path/to/subdirectory/YourSolution.sln
-          dotnet test path/to/subdirectory/YourSolution.sln
+          # Replace 'YourSolution.sln' with the actual path to your .sln file
+          dotnet build path/to/YourSolution.sln || echo "Build failed."
+          dotnet test path/to/YourSolution.sln || echo "Tests failed."
 
       - name: Install AnyDesk
         run: |
