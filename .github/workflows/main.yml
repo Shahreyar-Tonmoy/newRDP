@@ -1,4 +1,4 @@
-name: Windows Virtual Environment
+name: Windows Setup
 
 on: 
   push:
@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  windows_rdp:
+  setup_windows_environment:
     runs-on: windows-latest
     steps:
     - name: Checkout repository
@@ -15,19 +15,21 @@ jobs:
 
     - name: Set up Windows environment
       run: |
-        echo Setting up Windows environment...
-        # Install any necessary software here
-        # For example, update system packages
+        echo "Setting up Windows environment..."
+        # Update system packages using Chocolatey
         choco upgrade all -y
-        
-    - name: Install dependencies
+
+    - name: Install Python
       run: |
-        echo Installing dependencies...
-        # You can install your dependencies here
+        echo "Installing Python..."
+        # Install Python using Chocolatey
         choco install python -y
+        # Verify Python installation
         python --version
 
-    - name: Set up RDP (Not recommended for extended use)
+    - name: Install Additional Tools
       run: |
-        # This step is more complex; actual RDP setup is not recommended on GitHub servers
-        echo 'Attempting RDP setup (if this was legal, which it isn't)'
+        echo "Installing additional tools..."
+        # Install other tools if necessary, for example:
+        choco install git -y
+        git --version
