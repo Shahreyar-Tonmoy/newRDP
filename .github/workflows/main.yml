@@ -47,15 +47,9 @@ jobs:
           dotnet build path/to/YourSolution.sln || echo "Build failed."
           dotnet test path/to/YourSolution.sln || echo "Tests failed."
 
-      - name: Setup Windows RDP
+      # Optional: You can set up RDP configuration manually on the target machine.
+      # This step does not apply to GitHub Actions directly.
+      - name: Remote Desktop Setup
         run: |
-          # Example of configuring RDP access. This is a placeholder.
-          # You will need to set up the appropriate network configurations and credentials.
-          Write-Output "Setting up Windows Remote Desktop. Ensure RDP access is configured on your target machine."
-          # Example configuration: Enable RDP and configure firewall rules (if applicable)
+          Write-Output "Please ensure RDP access is configured manually on your target machine."
 
-      - name: Connect to Remote Desktop
-        run: |
-          # RDP connection is not typically executed within GitHub Actions.
-          # Instead, use a remote machine or service to execute RDP commands.
-          Write-Output "Connecting to Remote Desktop. This step is usually performed outside of GitHub Actions."
