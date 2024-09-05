@@ -1,35 +1,38 @@
-name: Windows Setup
+name: Remote Desktop with Docker
 
-on: 
+on:
   push:
     branches:
       - main
   workflow_dispatch:
 
 jobs:
-  setup_windows_environment:
-    runs-on: windows-latest
+  build-and-run:
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set up Windows environment
-      run: |
-        echo "Setting up Windows environment..."
-        # Update system packages using Chocolatey
-        choco upgrade all -y
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v2
 
-    - name: Install Python
+    - name: Build Docker image
       run: |
-        echo "Installing Python..."
-        # Install Python using Chocolatey
-        choco install python -y
-        # Verify Python installation
-        python --version
+        docker build -t my-remote-desktop .
 
-    - name: Install Additional Tools
+    - name: Run Docker container
       run: |
-        echo "Installing additional tools..."
-        # Install other tools if necessary, for example:
-        choco install git -y
-        git --version
+        docker run -d -p 5901:5901 --name remote-desktop my-remote-desktop
+
+    - name: Verify Docker container
+      run: |
+        docker ps
+        docker logs remote-desktop
+
+    - name: Wait for VNC server to start
+      run: |
+        sleep 30  # Give some time for the VNC server to start
+
+    - name: Retrieve AnyDesk ID
+      run: |
+        echo "VNC server is running on port 5901"
