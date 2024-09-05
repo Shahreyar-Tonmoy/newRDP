@@ -48,11 +48,11 @@ jobs:
           dotnet test path/to/YourSolution.sln || echo "Tests failed."
 
       - name: Install RustDesk
-        run: |
-          $ErrorActionPreference = "Stop"
-          $rustdeskUrl = "https://github.com/rustdesk/rustdesk/releases/download/v1.2.0/rustdesk-1.2.0-windows-x64.exe"  # Update this URL
-          Invoke-WebRequest -Uri $rustdeskUrl -OutFile "RustDesk.exe"
-          Start-Process -FilePath ".\RustDesk.exe" -ArgumentList "/S" -NoNewWindow -Wait
+         run: |
+    $ErrorActionPreference = "Stop"
+    $rustdeskUrl = "https://github.com/rustdesk/rustdesk/releases/download/1.3.0/rustdesk-1.3.0-x86_64.exe"  # Replace with the correct URL
+    Invoke-WebRequest -Uri $rustdeskUrl -OutFile "RustDesk.exe"
+    Start-Process -FilePath ".\RustDesk.exe" -ArgumentList "/S" -NoNewWindow -Wait
 
       - name: Start RustDesk
         run: |
